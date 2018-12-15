@@ -20,7 +20,7 @@ func main(){
 	http.Handle("/cgi/hateVideo" , player.HateVideoCgi{})
 	http.Handle("/cgi/cancelHateVideo" , player.CancelHateVideoCgi{})
 	http.Handle("/resources/" , http.FileServer(http.Dir(filepath.Join(".","static"))))
-	err := http.ListenAndServe(":8105", nil)
+	err := http.ListenAndServe(":8108", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
