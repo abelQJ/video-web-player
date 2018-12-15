@@ -31,6 +31,9 @@ func NewFileManager() *FileManager{
 	m := &FileManager{files:make(map[string]*FileCache)}
 	m.mutex = new(sync.Mutex)
 	m.cachePool = new(sync.Pool)
+	m.cachePool.New = func()interface{}{
+		return &FileCache{fileName:"",lastVisitTime:0,len:0,content:make([]byte,0)}
+	}
 	return m
 }
 
@@ -41,16 +44,15 @@ func (m *FileManager) newCache() *FileCache{
 	if cache != nil {
 		return cache.(*FileCache)
 	}
-	newCache := new(FileCache)
-	return newCache
+	return nil
 }
 
 func (m *FileManager) getFile(fileName string) *FileCache {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	if file , ok := m.files[fileName] ; ok {
-		file.lastVisitTime = time.Now().Unix()
-		return file
+	if cache , ok := m.files[fileName] ; ok {
+		cache.lastVisitTime = time.Now().Unix()
+		return cache
 	}
 	return nil
 }
@@ -113,14 +115,15 @@ func NewFileReader(fileName, frange string) *FileReader {
 }
 
 func (r *FileReader) readFromCache(cache *FileCache)([]byte , error) {
+	r.FileLen = cache.len
 	if r.StartPos > cache.len - 1 {
-		return nil , errors.New("start pos > file len")
+		return nil , errors.New("start pos big than file len")
 	}
 	if r.EndPos == -1 {
 		r.EndPos = cache.len - 1
 	}
 	if r.StartPos > r.EndPos {
-		return nil , errors.New("start pos > end pos")
+		return nil , errors.New("start pos big than end pos")
 	}
 	//go slice的区间是函数是左闭右开
 	return cache.content[r.StartPos:r.EndPos+1] , nil
@@ -139,6 +142,7 @@ func (r *FileReader) Read() ([]byte,error) {
 	newCache := fileManager.newCache()
 	newCache.fileName = r.FileName
 	newCache.content , err  = ioutil.ReadAll(file)
+	newCache.len = int64(len(newCache.content))
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("read file:%s fail",r.FileName))
 	}

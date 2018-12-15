@@ -141,12 +141,15 @@ func GetDirConfList() []DirConf  {
 	}
 	for i := 0; i < len(dirs.Dirs) ; i++ {
 		dir := &dirs.Dirs[i]
-		dir.Files = make([]string , 100)
+		dir.Files = make([]string,0)
 		dir.Vid2File = make(map[string]string)
 		dir.Files = GetDirFileList(dir.Path)
 		for _ , filePath := range dir.Files {
-			dir.Vid2File[path.Base(filePath)] = filePath
-			dir.Vids = append(dir.Vids , path.Base(filePath))
+			fileName := path.Base(filePath)
+			if fileName != "." {
+				dir.Vid2File[fileName] = filePath
+				dir.Vids = append(dir.Vids , fileName)
+			}
 		}
 	}
 	return dirs.Dirs

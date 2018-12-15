@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"errors"
 	"strconv"
-
+	"log"
 )
 
 type GetConfigCgi struct {
@@ -107,10 +107,11 @@ func (c GetVideoCgi) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	LogAccess(w,r)
 	defer HandlePanic(w,r)
 	
-	reqRange := r.Header.Get("Http-Range")
+	reqRange := r.Header.Get("Range")
 	if reqRange == "" {
 		reqRange = "bytes=0-"
 	}
+	log.Printf("http req range:%s\n" , reqRange)
 	vid := r.FormValue("vid")
 	filePath := GetPathByVid(vid)
 	if vid == "" || filePath == "" {
@@ -125,6 +126,9 @@ func (c GetVideoCgi) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length" , strconv.Itoa(len(content)))
 	w.Header().Set("Accept-Ranges" , "bytes")
 	w.Header().Set("Connection",  "keep-alive")
-	w.Header().Set("Content-Range" , fmt.Sprintf("bytes %d-%d/%d",fr.StartPos,fr.EndPos,fr.FileLen))
+	contentRange := fmt.Sprintf("bytes %d-%d/%d",fr.StartPos,fr.EndPos,fr.FileLen)
+	w.Header().Set("Content-Range" , contentRange )
+	log.Printf("content range:%s\n" , contentRange)
+	w.WriteHeader(206)
 	w.Write(content)
 }
