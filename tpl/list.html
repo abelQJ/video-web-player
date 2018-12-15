@@ -1,0 +1,10 @@
+{{define "list"}}
+    {{template "header" .}}
+    <body>
+        {{template "nav"}}
+
+        {{range .VidList}}
+            <a href = "/page/play?vid={{.}}">{{.}}</a>
+        {{end}}
+    </body>
+{{end}}

@@ -1,0 +1,14 @@
+{{define "config"}}
+    {{template "header" .}}
+    <body>
+        {{template "nav"}}
+        <div>
+            <textarea  rows="15" cols="20" id = "id_config"> loading ... </textarea> <br>
+            <button  id = "id_submit">修改</button>
+        </div>
+        <script>
+            $("#id_submit").click(saveConfigData);
+            $(document).ready(getConfigData);
+        </script>
+    </body>
+{{end}}

@@ -1,0 +1,10 @@
+{{define "home"}}
+    {{template "header" .}}
+    <body>
+        {{template "nav"}}
+
+        {{range .DirList}}
+            <a href = "/page/list?target={{.Id}}">{{.Info}}</a>
+        {{end}}
+    </body>
+{{end}}
