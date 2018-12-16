@@ -13,9 +13,9 @@ cd video-web-player && go build
 # 启动
 
 ```
-./video-web-player -confAccessKey key
+./video-web-player -confAccessKey key -port num -https true
 ```
-请记住这个key，在后续配置系统时会用到。不指定confAccessKey，默认key=pi
+请记住这个key，在后续配置系统时会用到。不指定confAccessKey，默认key=pi。端口不设定默认值是8080，https默认不开启
 
 # 配置
 
