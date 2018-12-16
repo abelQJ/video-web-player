@@ -19,6 +19,7 @@ func main(){
     flag.StringVar(&confAccessKey , "confAccessKey" , "pi" ,"-confAccessKey key")
     flag.Parse()
     expvar.Get("confAccessKey").(*expvar.String).Set(confAccessKey)
+    http.Handle("/", player.NotFoundPage{})
     http.Handle("/page/list", player.NewListPage())
     http.Handle("/page/config", player.NewConfigPage())
     http.Handle("/page/home" , player.NewHomePage())

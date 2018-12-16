@@ -40,6 +40,10 @@ type PlayPage struct {
     Vid   string
 }
 
+type NotFoundPage struct {
+
+}
+
 func NewConfigPage() *ConfigPage{
     return &ConfigPage{PageCommon{Title:""}}
 }
@@ -56,6 +60,16 @@ func NewPlayPage() *PlayPage{
     return &PlayPage{PageCommon:PageCommon{Title:""},Vid:""}
 }
 
+func (p NotFoundPage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    LogAccess(w,r)
+    defer HandlePanic(w,r)
+    var data CgiCommonRet
+    data.Ret = 404
+    data.Msg = "not found"
+    w.WriteHeader(404)
+    w.Write([]byte(data.ToJsonBytes()))
+}
+
 func (p ConfigPage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     LogAccess(w,r)
     defer HandlePanic(w,r)
@@ -63,8 +77,6 @@ func (p ConfigPage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     pageData.Title = "配置页"
     drivers.ExecuteTemplate(w, "config",pageData )
 }
-
-
 
 func (p HomePage) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     LogAccess(w,r)
