@@ -2,13 +2,13 @@
     {{template "header" .}}
     <body>
         {{template "nav"}}
-        <video  width="100%" height="100%"  controls ="controls"  >
+        <video  width="80%" height="80%"  controls ="controls"  >
                 <source src="/cgi/getVideo?vid={{.Vid}}" type="video/mp4">
         </video>
-        <a href = "/cgi/loveVideo?vid={{.Vid}}">收藏</a>
-        <a href = "/cgi/cancelLoveVideo?vid={{.Vid}}">取消收藏</a>
-        <a href = "/cgi/hateVideo?vid={{.Vid}}">黑名单</a>
-        <a href = "/cgi/cancelHateVideo?vid={{.Vid}}">取消黑名单</a>
-        
+        <br>
+        <button  onclick = 'notify("/cgi/loveVideo?vid={{.Vid}}")()'>收藏</button>
+        <button  onclick = 'notify("/cgi/cancelLoveVideo?vid={{.Vid}}")()'>取消收藏</button>
+        <button  onclick = 'notify("/cgi/hateVideo?vid={{.Vid}}")()'>黑名单</button>
+        <button  onclick = 'notify("/cgi/cancelHateVideo?vid={{.Vid}}")()'>取消黑名单</button>
     </body>
 {{end}}

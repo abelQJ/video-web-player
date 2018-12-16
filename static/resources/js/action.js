@@ -16,4 +16,17 @@ function getConfigData()
        });
 }
 
+function notify(target_cgi)
+{
+    return function() {
+        $.get(
+            target_cgi,
+            function(data , status){
+                alert(data.msg)
+            }
+        )
+    }
+}
+
+
 $("#id_submit").click(saveConfigData);

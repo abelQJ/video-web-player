@@ -2,9 +2,10 @@
     {{template "header" .}}
     <body>
         {{template "nav"}}
-
+        <ol>
         {{range .VidList}}
-            <a href = "/page/play?vid={{.}}&rand=x">{{.}}</a><br>
+            <li><a href = "/page/play?vid={{.}}&rand=x">{{.}}</a></li>
         {{end}}
+        </ol>
     </body>
 {{end}}

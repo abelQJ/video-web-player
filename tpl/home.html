@@ -2,9 +2,10 @@
     {{template "header" .}}
     <body>
         {{template "nav"}}
-
+        <ol>
         {{range .DirList}}
-            <a href = "/page/list?target={{.Id}}">{{.Info}}</a><br>
+            <li><a href = "/page/list?target={{.Id}}">{{.Info}}</a></li>
         {{end}}
+        </ol>
     </body>
 {{end}}
